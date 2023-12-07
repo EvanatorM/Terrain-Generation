@@ -5,8 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer), typeof(MeshFilter))]
 public class ChunkDemo : MonoBehaviour
 {
-    [SerializeField, Range(2, 100)] int resolution = 10;
+    [SerializeField, Range(2, 1000)] int resolution = 10;
     [SerializeField, Range(1, 100)] int size = 10;
+    [SerializeField] float amplitude, frequency;
+    [SerializeField] int octaves = 3;
 
     MeshFilter mFilter;
 
@@ -32,7 +34,9 @@ public class ChunkDemo : MonoBehaviour
         {
             for (int z = 0; z < resolution; z++)
             {
-                vertices[x * resolution + z] = new Vector3(x * spacing, Random.Range(-1f, 1f), z * spacing);
+                float xPos = x * spacing;
+                float zPos = z * spacing;
+                vertices[x * resolution + z] = new Vector3(xPos, Noise.Noise2D(xPos, zPos, amplitude, frequency, octaves), zPos);
                 normals[x * resolution + z] = Vector3.up;
             }
         }
